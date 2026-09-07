@@ -16,3 +16,6 @@ class BaseLLMClient(ABC):
     async def generate_stream(self, messages: List[ChatMessage]) -> AsyncGenerator[str, None]:
         """Genera una respuesta en streaming."""
         raise NotImplementedError("This method should be implemented by subclasses.")
+
+    async def aclose(self) -> None:
+        """Cierra la conexión HTTP subyacente. Override en clientes que la necesiten."""

@@ -65,22 +65,24 @@ class OpenRouterClient(BaseLLMClient):
         messages: List[ChatMessage],
     ) -> AsyncGenerator[str, None]:
         try:
-            stream = await self._client.chat.completions.create(
+            async with await self._client.chat.completions.create(
                 model=self.model,
                 messages=[m.model_dump() for m in messages],
                 temperature=self.temperature,
                 max_tokens=self.max_tokens,
                 stream=True,
-            )
+            ) as stream:
+                async for chunk in stream:
+                    if not chunk.choices:
+                        continue
 
-            async for chunk in stream:
-                if not chunk.choices:
-                    continue
+                    delta = chunk.choices[0].delta.content
 
-                delta = chunk.choices[0].delta.content
-
-                if delta:
-                    yield delta
+                    if delta:
+                        yield delta
 
         except (RateLimitError, APIConnectionError, APIError) as e:
             yield f"\n[⚠️ Error durante el streaming: {e}]"
+
+    async def aclose(self) -> None:
+        await self._client.close()

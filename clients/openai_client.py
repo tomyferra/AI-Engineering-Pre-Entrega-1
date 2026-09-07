@@ -36,16 +36,19 @@ class OpenAIClient(BaseLLMClient):
 
     async def generate_stream(self, messages: List[ChatMessage]) -> AsyncGenerator[str, None]:
         try:
-            stream = await self._client.chat.completions.create(
+            async with await self._client.chat.completions.create(
                 model=self.model,
                 messages=[m.model_dump() for m in messages],
                 temperature=self.temperature,
                 max_tokens=self.max_tokens,
                 stream=True,
-            )
-            async for chunk in stream:
-                delta = chunk.choices[0].delta.content
-                if delta:
-                    yield delta
+            ) as stream:
+                async for chunk in stream:
+                    delta = chunk.choices[0].delta.content
+                    if delta:
+                        yield delta
         except (RateLimitError, APIConnectionError, APIError) as e:
             yield f"\n[⚠️ Error durante el streaming: {e}]"
+
+    async def aclose(self) -> None:
+        await self._client.close()

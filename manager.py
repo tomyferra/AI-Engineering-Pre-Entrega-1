@@ -41,3 +41,12 @@ class AsyncLLMManager:
     async def generate_stream(self, messages: List[ChatMessage]) -> AsyncGenerator[str, None]:
         async for chunk in self._client.generate_stream(messages):
             yield chunk
+
+    async def aclose(self) -> None:
+        await self._client.aclose()
+
+    async def __aenter__(self) -> "AsyncLLMManager":
+        return self
+
+    async def __aexit__(self, *exc_info) -> None:
+        await self.aclose()

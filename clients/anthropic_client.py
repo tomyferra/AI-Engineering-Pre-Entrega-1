@@ -50,3 +50,6 @@ class AnthropicClient(BaseLLMClient):
                     yield texto
         except (AnthropicRateLimitError, AnthropicConnectionError, AnthropicAPIError) as e:
             yield f"\n[⚠️ Error durante el streaming: {e}]"
+
+    async def aclose(self) -> None:
+        await self._client.close()

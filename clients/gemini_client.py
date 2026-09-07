@@ -57,3 +57,6 @@ class GeminiClient(BaseLLMClient):
                     yield chunk.text
         except Exception as e:
             yield f"\n[⚠️ Error durante el streaming: {e}]"
+
+    async def aclose(self) -> None:
+        self._client.close()
