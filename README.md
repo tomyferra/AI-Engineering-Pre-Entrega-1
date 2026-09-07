@@ -32,6 +32,54 @@ Este artefacto debe ser una clase (o conjunto de clases) en **Python 3.12** que 
 
 Repositorio de GitHub que contenga la implementación de los clientes asíncronos, archivos de configuración (`schemas.py`), variables de entorno (`.env.example`) y un script de prueba de streaming.
 
+## Cómo ejecutar el proyecto
+
+### 1. Crear y activar el entorno virtual
+
+```bash
+# Crear el entorno virtual (Python 3.12)
+python -m venv venv
+
+# Activar en Windows (PowerShell)
+.\venv\Scripts\Activate.ps1
+
+# Activar en Windows (cmd)
+.\venv\Scripts\activate.bat
+
+# Activar en macOS/Linux
+source venv/bin/activate
+```
+
+### 2. Instalar dependencias
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Configurar variables de entorno
+
+Copia `.env.example` a `.env` y completa tus API keys:
+
+```bash
+cp .env.example .env
+```
+
+Variables necesarias:
+
+| Variable | Descripción |
+|---|---|
+| `OPENAI_API_KEY` | API key de OpenAI |
+| `ANTHROPIC_API_KEY` | API key de Anthropic |
+| `LLM_PROVIDER` | Proveedor a usar (`openai` o `anthropic`) |
+
+### 4. Ejecutar el script de prueba
+
+```bash
+python main.py
+```
+
+Esto ejecutará una pregunta corta ("¿Qué es la entropía?") tanto en modo normal (respuesta completa) como en modo streaming (tokens a medida que llegan).
+
 ## Entregable
 
 1. Configura un entorno virtual con Python 3.12 e instala `openai`, `anthropic`, `pydantic` y `python-dotenv`.
