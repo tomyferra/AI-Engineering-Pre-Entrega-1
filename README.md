@@ -37,7 +37,7 @@ Repositorio de GitHub que contenga la implementación de los clientes asíncrono
 ### 1. Crear y activar el entorno virtual
 
 ```bash
-# Crear el entorno virtual (Python 3.12)
+# Crear el entorno virtual (Python 3.13)
 python -m venv venv
 
 # Activar en Windows (PowerShell)
@@ -68,9 +68,13 @@ Variables necesarias:
 
 | Variable | Descripción |
 |---|---|
-| `OPENAI_API_KEY` | API key de OpenAI |
-| `ANTHROPIC_API_KEY` | API key de Anthropic |
-| `LLM_PROVIDER` | Proveedor a usar (`openai` o `anthropic`) |
+| `LLM_PROVIDER` | Proveedor a usar: `openai`, `anthropic`, `gemini` u `openrouter` |
+| `OPENAI_API_KEY` | API key de OpenAI (requerida si `LLM_PROVIDER=openai`) |
+| `ANTHROPIC_API_KEY` | API key de Anthropic (requerida si `LLM_PROVIDER=anthropic`) |
+| `GEMINI_API_KEY` | API key de Google Gemini (requerida si `LLM_PROVIDER=gemini`) |
+| `OPENROUTER_API_KEY` | API key de OpenRouter (requerida si `LLM_PROVIDER=openrouter`) |
+
+Solo hace falta completar la key del proveedor que vayas a usar; `AsyncLLMManager` la resuelve automáticamente según `LLM_PROVIDER`.
 
 ### 4. Ejecutar el script de prueba
 
@@ -78,11 +82,19 @@ Variables necesarias:
 python main.py
 ```
 
-Esto ejecutará una pregunta corta ("¿Qué es la entropía?") tanto en modo normal (respuesta completa) como en modo streaming (tokens a medida que llegan).
+Esto ejecutará una pregunta corta ("¿Cuál es la capital de Francia?") tanto en modo normal (respuesta completa) como en modo streaming (tokens a medida que llegan).
+
+## Estructura del proyecto
+
+- `schemas.py`: modelos Pydantic (`ChatMessage`, `LLMConfig`, `ModelResponse`) y el enum `Provider`.
+- `clients/llm_client.py`: clase base abstracta `BaseLLMClient`.
+- `clients/openai_client.py`, `anthropic_client.py`, `gemini_client.py`, `openrouter_client.py`: implementaciones concretas por proveedor.
+- `manager.py`: `AsyncLLMManager`, el punto de entrada único que instancia el cliente correcto según `LLMConfig.provider`.
+- `main.py`: script de prueba (modo normal + streaming).
 
 ## Entregable
 
-1. Configura un entorno virtual con Python 3.12 e instala `openai`, `anthropic`, `pydantic` y `python-dotenv`.
+1. Configura un entorno virtual con Python 3.13 e instala `openai`, `anthropic`, `pydantic` y `python-dotenv`.
 2. Crea un esquema de Pydantic para validar los parámetros de entrada del modelo (temperatura de 0 a 2, `max_tokens`, etc.).
 3. Implementa una clase `AsyncLLMManager` que pueda cargar tanto OpenAI como Anthropic basándose en una variable de configuración.
 4. El método de generación debe ser capaz de manejar streaming: usa `yield` para retornar fragmentos de texto conforme lleguen de la API.

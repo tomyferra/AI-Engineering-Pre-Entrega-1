@@ -8,7 +8,7 @@ class BaseLLMClient(ABC):
     """Contrato que todo cliente de LLM debe cumplir, sin importar el proveedor real detrás."""
 
     @abstractmethod
-    async def generate(self, message: ChatMessage) -> ModelResponse:
+    async def generate(self, messages: List[ChatMessage]) -> ModelResponse:
         """Genera una respuesta completa (modo normal, no streaming)."""
         raise NotImplementedError("This method should be implemented by subclasses.")
 
