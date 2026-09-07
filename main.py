@@ -16,7 +16,7 @@ async def main() -> None:
     provider = Provider(os.getenv("LLM_PROVIDER", "openrouter"))
     config = LLMConfig(provider=provider, model=MODELS_POR_PROVIDER[provider], temperature=0.2, max_tokens=1024)
 
-    question_to_answer = "¿Cuál es la capital de Francia?"
+    question_to_answer = "¿Make a summary of WW2 in 1000 tokens?"
     pregunta = [ChatMessage(role="user", content=question_to_answer)]
 
     print(f"--- Pregunta: ({question_to_answer}) ---")

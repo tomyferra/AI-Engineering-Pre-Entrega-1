@@ -11,7 +11,7 @@ MODELS_POR_PROVIDER = {
     Provider.OPENAI: "gpt-4o-mini",
     Provider.ANTHROPIC: "claude-3-5-haiku-20241022",
     Provider.GEMINI: "gemini-3.6-flash",
-    Provider.OPENROUTER: "minimax/minimax-m3:free",
+    Provider.OPENROUTER: "openrouter/free",
 }
 
 CLIENTS_POR_PROVIDER = {
